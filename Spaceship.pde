@@ -1,33 +1,63 @@
-class Spaceship extends Floater {
-    Spaceship() {
-        corners = 3;
-        xCorners = new int[]{-20, 20, -20};
-        yCorners = new int[]{-20, 0, 20};
-        myColor = color(255, 255, 255);
-        myCenterX = width / 2;
-        myCenterY = height / 2;
-        myXspeed = 0;
-        myYspeed = 0;
-        myPointDirection = 0;
-    }
+class Spaceship {
+  private int corners;
+  private int[] xCorners, yCorners;
+  private int myColor;
+  private double myCenterX, myCenterY;
+  private double myXspeed, myYspeed;
+  private double myPointDirection;
 
-    public void hyperspace() {
-        myXspeed = 0;
-        myYspeed = 0;
-        myCenterX = Math.random() * width;
-        myCenterY = Math.random() * height;
-        myPointDirection = Math.random() * 360;
-    }
+  Spaceship() {
+    corners = 3;
+    xCorners = new int[]{-10, 20, -10};
+    yCorners = new int[]{-10, 0, 10};
+    myColor = color(255); // White color
+    myCenterX = width / 2.0;
+    myCenterY = height / 2.0;
+    myXspeed = 0;
+    myYspeed = 0;
+    myPointDirection = 0;
+  }
 
-    public double getX() {
-        return myCenterX;
-    }
+  public void accelerate(double dAmount) {
+    double dRadians = myPointDirection * (Math.PI / 180);
+    myXspeed += dAmount * Math.cos(dRadians);
+    myYspeed += dAmount * Math.sin(dRadians);
+  }
 
-    public double getY() {
-        return myCenterY;
-    }
+  public void turn(double degreesOfRotation) {
+    myPointDirection += degreesOfRotation;
+  }
 
-    public double getDirection() {
-        return myPointDirection;
+  public void move() {
+    myCenterX += myXspeed;
+    myCenterY += myYspeed;
+
+    if (myCenterX > width) myCenterX = 0;
+    if (myCenterX < 0) myCenterX = width;
+    if (myCenterY > height) myCenterY = 0;
+    if (myCenterY < 0) myCenterY = height;
+  }
+
+  public void show() {
+    fill(myColor);
+    stroke(myColor);
+    pushMatrix();
+    translate((float) myCenterX, (float) myCenterY);
+    float dRadians = (float) (myPointDirection * (Math.PI / 180));
+    rotate(dRadians);
+    beginShape();
+    for (int i = 0; i < corners; i++) {
+      vertex(xCorners[i], yCorners[i]);
     }
+    endShape(CLOSE);
+    popMatrix();
+  }
+
+  public void hyperspace() {
+    myCenterX = Math.random() * width;
+    myCenterY = Math.random() * height;
+    myXspeed = 0;
+    myYspeed = 0;
+    myPointDirection = Math.random() * 360;
+  }
 }
