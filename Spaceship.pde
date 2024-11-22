@@ -1,4 +1,6 @@
 class Spaceship extends Floater {
+    private ArrayList<Laser> lasers;
+
     Spaceship() {
         corners = 3;
         xCorners = new int[]{-20, 20, -20};
@@ -9,6 +11,7 @@ class Spaceship extends Floater {
         myXspeed = 0;
         myYspeed = 0;
         myPointDirection = 0;
+        lasers = new ArrayList<>();
     }
 
     public void hyperspace() {
@@ -19,15 +22,29 @@ class Spaceship extends Floater {
         myPointDirection = Math.random() * 360;
     }
 
-    public double getX() {
-        return myCenterX;
+    public void fireLaser() {
+        lasers.add(new Laser(myCenterX, myCenterY, myPointDirection));
     }
 
-    public double getY() {
-        return myCenterY;
+    public void updateLasers() {
+        for (int i = lasers.size() - 1; i >= 0; i--) {
+            Laser laser = lasers.get(i);
+            laser.move();
+            laser.show();
+            if (laser.offScreen()) {
+                lasers.remove(i);
+            }
+        }
     }
 
-    public double getDirection() {
-        return myPointDirection;
+    public boolean checkLaserCollision(Asteroid asteroid) {
+        for (int i = lasers.size() - 1; i >= 0; i--) {
+            if (lasers.get(i).hits(asteroid)) {
+                lasers.remove(i); // Remove laser on collision
+                return true;
+            }
+        }
+        return false;
     }
 }
+
