@@ -48,3 +48,34 @@ class Spaceship extends Floater {
     }
 }
 
+class Laser {
+    private double x, y, direction, speed;
+
+    Laser(double startX, double startY, double startDirection) {
+        x = startX;
+        y = startY;
+        direction = startDirection;
+        speed = 10;
+    }
+
+    public void move() {
+        double radians = direction * Math.PI / 180;
+        x += speed * Math.cos(radians);
+        y += speed * Math.sin(radians);
+    }
+
+    public void show() {
+        stroke(255, 0, 0);
+        strokeWeight(2);
+        point((float) x, (float) y);
+    }
+
+    public boolean offScreen() {
+        return x < 0 || x > width || y < 0 || y > height;
+    }
+
+    public boolean hits(Asteroid asteroid) {
+        return asteroid.hit(x, y);
+    }
+}
+
