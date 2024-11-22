@@ -3,7 +3,7 @@ class Spaceship extends Floater {
 
     Spaceship() {
         corners = 3;
-        xCorners = new int[]{-20, 20, -20};
+        xCorners = new int[]{-20, 20, -20};  // Triangular shape
         yCorners = new int[]{-20, 0, 20};
         myColor = color(255, 255, 255);
         myCenterX = width / 2;
@@ -55,7 +55,7 @@ class Laser {
         x = startX;
         y = startY;
         direction = startDirection;
-        speed = 10;
+        speed = 10;  // Speed of laser
     }
 
     public void move() {
@@ -65,9 +65,9 @@ class Laser {
     }
 
     public void show() {
-        stroke(255, 0, 0);
+        stroke(255, 0, 0);  // Red color for laser
         strokeWeight(2);
-        point((float) x, (float) y);
+        point((float) x, (float) y);  // Draw laser as a point
     }
 
     public boolean offScreen() {
@@ -78,4 +78,3 @@ class Laser {
         return asteroid.hit(x, y);
     }
 }
-
