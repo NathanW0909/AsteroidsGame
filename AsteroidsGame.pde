@@ -1,66 +1,57 @@
 Spaceship ship;
-Star[] stars;
+ArrayList<Asteroid> asteroids;
 
 void setup() {
-    size(800, 800); // Set canvas size
-    ship = new Spaceship(); // Initialize spaceship
-    stars = new Star[100]; // Create an array of stars
-    for (int i = 0; i < stars.length; i++) {
-        stars[i] = new Star(); // Initialize each star
+    size(800, 800);
+    ship = new Spaceship();
+    asteroids = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+        asteroids.add(new Asteroid());
     }
 }
 
 void draw() {
-    background(0); // Black background
-    for (Star star : stars) {
-        star.show(); // Draw stars
+    background(0);
+
+    // Show and move asteroids
+    for (int i = asteroids.size() - 1; i >= 0; i--) {
+        Asteroid asteroid = asteroids.get(i);
+        asteroid.move();
+        asteroid.show();
     }
-    ship.move(); // Move spaceship
-    ship.show(); // Draw spaceship
+
+    // Show and move spaceship
+    ship.move();
+    ship.show();
+    ship.updateLasers();
+
+    // Check for collisions between lasers and asteroids
+    for (int i = asteroids.size() - 1; i >= 0; i--) {
+        if (ship.checkLaserCollision(asteroids.get(i))) {
+            asteroids.remove(i); // Destroy asteroid
+        }
+    }
+
+    // Respawn asteroids if none are left
+    if (asteroids.isEmpty()) {
+        for (int i = 0; i < 10; i++) {
+            asteroids.add(new Asteroid());
+        }
+    }
 }
 
 void keyPressed() {
     if (key == CODED) {
         if (keyCode == LEFT) {
-            ship.turn(-5); // Turn left
+            ship.turn(-5);
         } else if (keyCode == RIGHT) {
-            ship.turn(5); // Turn right
+            ship.turn(5);
         } else if (keyCode == UP) {
-            ship.accelerate(0.1); // Accelerate forward
+            ship.accelerate(0.2);
         }
-    } else if (key == 'h' || key == 'H') {
-        ship.hyperspace(); // Activate hyperspace
+    } else if (key == ' ') {
+        ship.fireLaser();
+    } else if (keyCode == ALT) {
+        ship.hyperspace();
     }
 }
-
-class Laser {
-    private double x, y, direction, speed;
-
-    Laser(double startX, double startY, double startDirection) {
-        x = startX;
-        y = startY;
-        direction = startDirection;
-        speed = 10;
-    }
-
-    public void move() {
-        double radians = direction * Math.PI / 180;
-        x += speed * Math.cos(radians);
-        y += speed * Math.sin(radians);
-    }
-
-    public void show() {
-        stroke(255, 0, 0);
-        strokeWeight(2);
-        point((float) x, (float) y);
-    }
-
-    public boolean offScreen() {
-        return x < 0 || x > width || y < 0 || y > height;
-    }
-
-    public boolean hits(Asteroid asteroid) {
-        return asteroid.hit(x, y);
-    }
-}
-
