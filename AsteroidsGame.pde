@@ -1,3 +1,89 @@
+Spaceship ship;
+ArrayList<Asteroid> asteroids;
+ArrayList<Laser> lasers;
+
+void setup() {
+    size(800, 800);
+    ship = new Spaceship();
+    asteroids = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+        asteroids.add(new Asteroid());
+    }
+    lasers = new ArrayList<>();
+}
+
+void draw() {
+    background(0);
+
+    // Show and move asteroids
+    for (int i = asteroids.size() - 1; i >= 0; i--) {
+        Asteroid asteroid = asteroids.get(i);
+        asteroid.move();
+        asteroid.show();
+    }
+
+    // Show and move spaceship
+    ship.move();
+    ship.show();
+
+    // Show and move lasers
+    for (int i = lasers.size() - 1; i >= 0; i--) {
+        Laser laser = lasers.get(i);
+        laser.move();
+        laser.show();
+
+        // Check for collisions with asteroids
+        for (int j = asteroids.size() - 1; j >= 0; j--) {
+            if (laser.hits(asteroids.get(j))) {
+                asteroids.remove(j); // Destroy asteroid
+                lasers.remove(i);   // Remove laser
+                break;
+            }
+        }
+
+        // Remove laser if it goes off screen
+        if (laser.offScreen()) {
+            lasers.remove(i);
+        }
+    }
+
+    // Respawn asteroids if none are left
+    if (asteroids.isEmpty()) {
+        for (int i = 0; i < 10; i++) {
+            asteroids.add(new Asteroid());
+        }
+    }
+}
+
+void keyPressed() {
+    if (key == CODED) {
+        if (keyCode == LEFT) {
+            ship.turn(-5);
+        } else if (keyCode == RIGHT) {
+            ship.turn(5);
+        } else if (keyCode == UP) {
+            ship.accelerate(0.2);
+        }
+    } else if (key == ' ') {
+        lasers.add(new Laser(ship.getX(), ship.getY(), ship.getDirection()));
+    } else if (keyCode == ALT) {
+        ship.hyperspace();
+    }
+}
+
+            ship.turn(-5);
+        } else if (keyCode == RIGHT) {
+            ship.turn(5);
+        } else if (keyCode == UP) {
+            ship.accelerate(0.5);
+        }
+    } else if (key == ' ') {
+        ship.fireLaser();
+    } else if (keyCode == ALT) {
+        ship.hyperspace();
+    }
+}
+
 class Asteroid {
     private double x, y, xSpeed, ySpeed, rotation, size;
 
@@ -7,7 +93,7 @@ class Asteroid {
         xSpeed = Math.random() * 2 - 1;
         ySpeed = Math.random() * 2 - 1;
         rotation = Math.random() * 360;
-        size = Math.random() * 50 + 40;  // Asteroids now have a larger size
+        size = Math.random() * 40 + 20; // Varying size between 20 and 60
     }
 
     public void move() {
@@ -21,9 +107,9 @@ class Asteroid {
     }
 
     public void show() {
-        stroke(255);  // White color for asteroids
+        stroke(255);
         noFill();
-        ellipse((float) x, (float) y, (float) size, (float) size);  // Larger asteroid display
+        ellipse((float) x, (float) y, (float) size, (float) size);
     }
 
     public boolean hit(double laserX, double laserY) {
@@ -38,7 +124,7 @@ class Laser {
         x = startX;
         y = startY;
         direction = startDirection;
-        speed = 8;  // Increased speed of laser for more action
+        speed = 10;
     }
 
     public void move() {
@@ -48,9 +134,9 @@ class Laser {
     }
 
     public void show() {
-        stroke(255, 0, 0);  // Red laser color
-        strokeWeight(4);  // Make the laser thicker for visibility
-        point((float) x, (float) y);  // Draw laser as a point
+        stroke(255, 0, 0);
+        strokeWeight(2);
+        point((float) x, (float) y);
     }
 
     public boolean offScreen() {
@@ -59,63 +145,5 @@ class Laser {
 
     public boolean hits(Asteroid asteroid) {
         return asteroid.hit(x, y);
-    }
-}
-
-Spaceship ship;
-ArrayList<Asteroid> asteroids;
-
-void setup() {
-    size(800, 800);  // Larger window size
-    ship = new Spaceship();
-    asteroids = new ArrayList<>();
-    for (int i = 0; i < 5; i++) {  // Start with fewer asteroids for clarity
-        asteroids.add(new Asteroid());
-    }
-}
-
-void draw() {
-    background(0);  // Black background for space
-
-    // Show and move asteroids
-    for (int i = asteroids.size() - 1; i >= 0; i--) {
-        Asteroid asteroid = asteroids.get(i);
-        asteroid.move();
-        asteroid.show();
-    }
-
-    // Show and move spaceship
-    ship.move();
-    ship.show();
-    ship.updateLasers();
-
-    // Check for collisions between lasers and asteroids
-    for (int i = asteroids.size() - 1; i >= 0; i--) {
-        if (ship.checkLaserCollision(asteroids.get(i))) {
-            asteroids.remove(i);  // Destroy asteroid on collision
-        }
-    }
-
-    // Respawn asteroids if none are left
-    if (asteroids.isEmpty()) {
-        for (int i = 0; i < 5; i++) {
-            asteroids.add(new Asteroid());
-        }
-    }
-}
-
-void keyPressed() {
-    if (key == CODED) {
-        if (keyCode == LEFT) {
-            ship.turn(-5);
-        } else if (keyCode == RIGHT) {
-            ship.turn(5);
-        } else if (keyCode == UP) {
-            ship.accelerate(0.5);
-        }
-    } else if (key == ' ') {
-        ship.fireLaser();
-    } else if (keyCode == ALT) {
-        ship.hyperspace();
     }
 }
