@@ -1,32 +1,40 @@
 Spaceship ship;
 Star[] stars;
-Asteroid[] asteroids;
+ArrayList<Asteroid> asteroids;
 ArrayList<Laser> lasers;
 
 void setup() {
   size(800, 600);
-@@ -13,17 +14,34 @@ void setup() {
-  for (int i = 0; i < asteroids.length; i++) {
-    asteroids[i] = new Asteroid();
+  ship = new Spaceship();
+  stars = new Star[100];
+  for (int i = 0; i < stars.length; i++) {
+    stars[i] = new Star();
+  }
+  asteroids = new ArrayList<Asteroid>();
+  for (int i = 0; i < 5; i++) {
+    asteroids.add(new Asteroid());
   }
   lasers = new ArrayList<Laser>();
 }
 
 void draw() {
   background(0);
-  
-  // Draw stars
   for (Star s : stars) {
     s.show();
   }
-  
-  // Draw asteroids
-  for (Asteroid a : asteroids) {
+  for (int i = asteroids.size() - 1; i >= 0; i--) {
+    Asteroid a = asteroids.get(i);
     a.move();
     a.show();
+    for (int j = lasers.size() - 1; j >= 0; j--) {
+      Laser l = lasers.get(j);
+      if (a.isHit(l)) {
+        asteroids.remove(i);
+        lasers.remove(j);
+        break;
+      }
+    }
   }
-  
-  // Draw and move lasers
   for (int i = lasers.size() - 1; i >= 0; i--) {
     Laser l = lasers.get(i);
     l.move();
@@ -35,42 +43,20 @@ void draw() {
       lasers.remove(i);
     }
   }
-  
-  // Draw and move spaceship
   ship.move();
   ship.show();
 }
-@@ -36,6 +54,38 @@ void keyPressed() {
+
+void keyPressed() {
+  if (keyCode == LEFT) {
+    ship.turn(-15);
+  } else if (keyCode == RIGHT) {
+    ship.turn(15);
   } else if (keyCode == UP) {
-    ship.accelerate(0.1);
+    ship.accelerate(0.3);
   } else if (key == ' ') {
-    ship.hyperspace();
     lasers.add(new Laser(ship));
-  }
-}
-class Laser {
-  private double x, y; // Current position
-  private double xSpeed, ySpeed; // Speed of the laser
-  private double direction; // Direction in degrees
-  Laser(Spaceship ship) {
-    direction = ship.getPointDirection();
-    x = ship.getCenterX();
-    y = ship.getCenterY();
-    // Calculate speed based on direction
-    double radians = direction * (Math.PI / 180);
-    xSpeed = 5 * Math.cos(radians);
-    ySpeed = 5 * Math.sin(radians);
-  }
-  public void move() {
-    x += xSpeed;
-    y += ySpeed;
-  }
-  public void show() {
-    stroke(255);
-    strokeWeight(2);
-    point((float) x, (float) y);
-  }
-  public boolean isOffScreen() {
-    return x < 0 || x > width || y < 0 || y > height;
+  } else if (keyCode == ALT) {
+    ship.hyperspace();
   }
 }
