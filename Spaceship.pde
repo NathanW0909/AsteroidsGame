@@ -18,4 +18,4 @@ class Spaceship extends Floater {
     myYspeed = 0;
     myPointDirection = Math.random() * 360;
   }
-}
+
