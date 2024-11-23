@@ -12,4 +12,3 @@ class Star {
     point(x, y);
   }
 }
-
