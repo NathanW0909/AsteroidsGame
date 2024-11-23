@@ -19,9 +19,13 @@ void setup() {
 
 void draw() {
   background(0);
+  
+  // Show stars
   for (Star s : stars) {
     s.show();
   }
+  
+
   for (int i = asteroids.size() - 1; i >= 0; i--) {
     Asteroid a = asteroids.get(i);
     a.move();
@@ -35,6 +39,7 @@ void draw() {
       }
     }
   }
+
   for (int i = lasers.size() - 1; i >= 0; i--) {
     Laser l = lasers.get(i);
     l.move();
@@ -43,6 +48,7 @@ void draw() {
       lasers.remove(i);
     }
   }
+  
   ship.move();
   ship.show();
 }
@@ -62,32 +68,31 @@ void keyPressed() {
 }
 
 class Laser {
-  private double x, y, xSpeed, ySpeed, direction;
-  private int life;
+  double x, y, xSpeed, ySpeed, direction;
 
   Laser(Spaceship s) {
     x = s.myCenterX;
     y = s.myCenterY;
     direction = s.myPointDirection;
+
     double rad = Math.toRadians(direction);
-    xSpeed = 5 * Math.cos(rad);
-    ySpeed = 5 * Math.sin(rad);
-    life = 60;
+    xSpeed = 8 * Math.cos(rad);
+    ySpeed = 8 * Math.sin(rad);
   }
 
   public void move() {
     x += xSpeed;
     y += ySpeed;
-    life--;
   }
 
   public void show() {
     stroke(255, 0, 0);
+    strokeWeight(3);
     point((float)x, (float)y);
   }
 
   public boolean isOffScreen() {
-    return life <= 0 || x < 0 || x > width || y < 0 || y > height;
+    return x < 0 || x > width || y < 0 || y > height;
   }
 }
 
@@ -123,3 +128,4 @@ class Asteroid {
     return dist((float)x, (float)y, (float)l.x, (float)l.y) < size / 2;
   }
 }
+
