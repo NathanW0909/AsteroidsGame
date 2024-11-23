@@ -48,13 +48,15 @@ void draw() {
 
 void keyPressed() {
   if (keyCode == LEFT) {
-    ship.turn(-5);
+    ship.turn(-15); // Increased turning speed
   } else if (keyCode == RIGHT) {
-    ship.turn(5);
+    ship.turn(15); // Increased turning speed
   } else if (keyCode == UP) {
-    ship.accelerate(0.1);
+    ship.accelerate(0.3); // Increased acceleration
   } else if (key == ' ') {
-    lasers.add(new Laser(ship));
+    lasers.add(new Laser(ship)); // Shoot laser
+  } else if (keyCode == ALT) { // Hyperspace with Alt key
+    ship.hyperspace();
   }
 }
 
