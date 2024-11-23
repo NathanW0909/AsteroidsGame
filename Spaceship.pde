@@ -32,6 +32,7 @@ class Spaceship {
     myCenterX += myXspeed;
     myCenterY += myYspeed;
 
+    // Screen wrapping
     if (myCenterX > width) myCenterX = 0;
     if (myCenterX < 0) myCenterX = width;
     if (myCenterY > height) myCenterY = 0;
@@ -58,6 +59,5 @@ class Spaceship {
     myCenterY = Math.random() * height;
     myXspeed = 0;
     myYspeed = 0;
-    myPointDirection = Math.random() * 360;
   }
 }
