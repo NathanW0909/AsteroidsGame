@@ -54,10 +54,10 @@ class Spaceship {
     popMatrix();
   }
 
-  public void hyperspace() {
-    myCenterX = Math.random() * width;
-    myCenterY = Math.random() * height;
-    myXspeed = 0;
-    myYspeed = 0;
-  }
+public void hyperspace() {
+  myCenterX = Math.random() * width; 
+  myCenterY = Math.random() * height; 
+  myXspeed = 0; // Stop horizontal movement
+  myYspeed = 0; // Stop vertical movement
+  myPointDirection = Math.random() * 360; 
 }
