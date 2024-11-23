@@ -1,5 +1,6 @@
 Spaceship ship;
 Star[] stars;
+Asteroid[] asteroids;
 
 void setup() {
   size(800, 600);
@@ -8,6 +9,10 @@ void setup() {
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
+  asteroids = new Asteroid[5];
+  for (int i = 0; i < asteroids.length; i++) {
+    asteroids[i] = new Asteroid();
+  }
 }
 
 void draw() {
@@ -15,21 +20,22 @@ void draw() {
   for (Star s : stars) {
     s.show();
   }
-  ship.show();
+  for (Asteroid a : asteroids) {
+    a.move();
+    a.show();
+  }
   ship.move();
+  ship.show();
 }
 
 void keyPressed() {
   if (keyCode == LEFT) {
-    ship.turnLeft();
+    ship.turn(-5);
   } else if (keyCode == RIGHT) {
-    ship.turnRight();
+    ship.turn(5);
   } else if (keyCode == UP) {
-    ship.accelerate();
+    ship.accelerate(0.1);
   } else if (key == ' ') {
     ship.hyperspace();
   }
 }
-
-
-
