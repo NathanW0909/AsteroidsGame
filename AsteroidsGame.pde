@@ -106,7 +106,7 @@ class Asteroid {
     xSpeed = Math.random() * 2 - 1;
     ySpeed = Math.random() * 2 - 1;
     direction = Math.random() * 360;
-    size = 30 + (int)(Math.random() * 20);
+    size = 30 + (int)(Math.random() * 30);
   }
 
   public void move() {
