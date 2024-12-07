@@ -1,14 +1,13 @@
 class Star {
-  private int x, y, starColor;
-
-  Star() {
-    x = (int) (Math.random() * width);
-    y = (int) (Math.random() * height);
-    starColor = color(255);
+  private float x, y;
+  
+  public Star() {
+    x = random(width);
+    y = random(height);
   }
 
   public void show() {
-    stroke(starColor);
+    stroke(255);
     point(x, y);
   }
 }
