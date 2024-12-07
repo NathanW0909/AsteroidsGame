@@ -67,34 +67,6 @@ void keyPressed() {
   }
 }
 
-class Laser {
-  double x, y, xSpeed, ySpeed, direction;
-
-  Laser(Spaceship s) {
-    x = s.myCenterX;
-    y = s.myCenterY;
-    direction = s.myPointDirection;
-
-    double rad = Math.toRadians(direction);
-    xSpeed = 8 * Math.cos(rad);
-    ySpeed = 8 * Math.sin(rad);
-  }
-
-  public void move() {
-    x += xSpeed;
-    y += ySpeed;
-  }
-
-  public void show() {
-    stroke(255, 0, 0);
-    strokeWeight(3);
-    point((float)x, (float)y);
-  }
-
-  public boolean isOffScreen() {
-    return x < 0 || x > width || y < 0 || y > height;
-  }
-}
 
 class Asteroid {
   private double x, y, xSpeed, ySpeed, direction;
@@ -124,8 +96,61 @@ class Asteroid {
     ellipse((float)x, (float)y, size, size);
   }
 
-  public boolean isHit(Laser l) {
-    return dist((float)x, (float)y, (float)l.x, (float)l.y) < size / 2;
+import java.util.ArrayList;
+
+class Asteroid extends Floater {
+  private double rotationSpeed;
+
+  public Asteroid() {
+    corners = 6;
+    xCorners = new int[]{-10, -7, 7, 10, 7, -7};
+    yCorners = new int[]{7, 10, 10, -7, -10, -7};
+    myColor = color(150, 150, 150);
+    myCenterX = Math.random() * width;
+    myCenterY = Math.random() * height;
+    myXspeed = Math.random() * 4 - 2;
+    myYspeed = Math.random() * 4 - 2;
+    myPointDirection = Math.random() * 360;
+    rotationSpeed = Math.random() * 4 - 2;
   }
+
+  @Override
+  public void move() {
+    super.move();
+    turn(rotationSpeed);
+  }
+
+  public double getCenterX() {
+    return myCenterX;
+  }
+
+  public double getCenterY() {
+    return myCenterY;
+  }
+}
+
+
+ArrayList<Asteroid> asteroids;
+
+void setup() {
+  size(800, 600);
+  asteroids = new ArrayList<Asteroid>();
+  for (int i = 0; i < 5; i++) {
+    asteroids.add(new Asteroid());
+  }
+}
+
+void draw() {
+  background(0);
+  for (int i = asteroids.size() - 1; i >= 0; i--) {
+    Asteroid a = asteroids.get(i);
+    a.show();
+    a.move();
+    if (dist((float)a.getCenterX(), (float)a.getCenterY(), (float)spaceship.getCenterX(), (float)spaceship.getCenterY()) < 20) {
+      asteroids.remove(i);
+    }
+  }
+  spaceship.show();
+  spaceship.move();
 }
 
