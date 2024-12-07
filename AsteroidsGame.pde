@@ -5,10 +5,12 @@ ArrayList<Asteroid> asteroids;
 void setup() {
   size(800, 600);
   ship = new Spaceship();
+
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
+
   asteroids = new ArrayList<Asteroid>();
   for (int i = 0; i < 5; i++) {
     asteroids.add(new Asteroid());
@@ -18,23 +20,15 @@ void setup() {
 void draw() {
   background(0);
 
-  // Show stars
   for (Star s : stars) {
     s.show();
   }
 
-  // Show and move asteroids
-  for (int i = asteroids.size() - 1; i >= 0; i--) {
-    Asteroid a = asteroids.get(i);
+  for (Asteroid a : asteroids) {
     a.move();
     a.show();
-    // Check for collision with spaceship
-    if (dist((float)a.getCenterX(), (float)a.getCenterY(), (float)ship.getCenterX(), (float)ship.getCenterY()) < 20) {
-      asteroids.remove(i);
-    }
   }
 
-  // Show and move spaceship
   ship.move();
   ship.show();
 }
@@ -46,12 +40,11 @@ void keyPressed() {
     ship.turn(20);
   } else if (keyCode == UP) {
     ship.accelerate(0.5);
-  } else if (keyCode == ALT) {
+  } else if (key == ' ') {
     ship.hyperspace();
   }
 }
 
-// Asteroid class
 class Asteroid extends Floater {
   private double rotationSpeed;
 
@@ -72,13 +65,4 @@ class Asteroid extends Floater {
     super.move();
     turn(rotationSpeed);
   }
-
-  public double getCenterX() {
-    return myCenterX;
-  }
-
-  public double getCenterY() {
-    return myCenterY;
-  }
 }
-
