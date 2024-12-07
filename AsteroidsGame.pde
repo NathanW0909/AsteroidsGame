@@ -20,16 +20,18 @@ void setup() {
 void draw() {
   background(0);
   
-  // Show stars
   for (Star s : stars) {
     s.show();
   }
-  
 
   for (int i = asteroids.size() - 1; i >= 0; i--) {
     Asteroid a = asteroids.get(i);
     a.move();
     a.show();
+    if (dist((float)a.getCenterX(), (float)a.getCenterY(), (float)ship.getCenterX(), (float)ship.getCenterY()) < 20) {
+      asteroids.remove(i);
+      continue;
+    }
     for (int j = lasers.size() - 1; j >= 0; j--) {
       Laser l = lasers.get(j);
       if (a.isHit(l)) {
@@ -65,40 +67,7 @@ void keyPressed() {
   } else if (keyCode == ALT) {
     ship.hyperspace();
   }
-}
-
-
-class Asteroid {
-  private double x, y, xSpeed, ySpeed, direction;
-  private int size;
-
-  Asteroid() {
-    x = Math.random() * width;
-    y = Math.random() * height;
-    xSpeed = Math.random() * 2 - 1;
-    ySpeed = Math.random() * 2 - 1;
-    direction = Math.random() * 360;
-    size = 30 + (int)(Math.random() * 30);
-  }
-
-  public void move() {
-    x += xSpeed;
-    y += ySpeed;
-    if (x > width) x = 0;
-    else if (x < 0) x = width;
-    if (y > height) y = 0;
-    else if (y < 0) y = height;
-  }
-
-  public void show() {
-    stroke(255);
-    noFill();
-    ellipse((float)x, (float)y, size, size);
-  }
-
-import java.util.ArrayList;
-
-class Asteroid extends Floater {
+}class Asteroid extends Floater {
   private double rotationSpeed;
 
   public Asteroid() {
@@ -114,10 +83,13 @@ class Asteroid extends Floater {
     rotationSpeed = Math.random() * 4 - 2;
   }
 
-  @Override
   public void move() {
     super.move();
     turn(rotationSpeed);
+  }
+
+  public boolean isHit(Laser l) {
+    return dist((float)myCenterX, (float)myCenterY, (float)l.getX(), (float)l.getY()) < 15;
   }
 
   public double getCenterX() {
@@ -130,27 +102,4 @@ class Asteroid extends Floater {
 }
 
 
-ArrayList<Asteroid> asteroids;
-
-void setup() {
-  size(800, 600);
-  asteroids = new ArrayList<Asteroid>();
-  for (int i = 0; i < 5; i++) {
-    asteroids.add(new Asteroid());
-  }
-}
-
-void draw() {
-  background(0);
-  for (int i = asteroids.size() - 1; i >= 0; i--) {
-    Asteroid a = asteroids.get(i);
-    a.show();
-    a.move();
-    if (dist((float)a.getCenterX(), (float)a.getCenterY(), (float)spaceship.getCenterX(), (float)spaceship.getCenterY()) < 20) {
-      asteroids.remove(i);
-    }
-  }
-  spaceship.show();
-  spaceship.move();
-}
 
