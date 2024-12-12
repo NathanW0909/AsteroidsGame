@@ -5,34 +5,43 @@ ArrayList<Laser> lasers;
 
 void setup() {
   size(800, 600);
+  
+  // Initialize spaceship
   ship = new Spaceship();
+  
+  // Initialize stars
   stars = new Star[100];
   for (int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
+
+  // Initialize asteroids
   asteroids = new ArrayList<Asteroid>();
   for (int i = 0; i < 5; i++) {
     asteroids.add(new Asteroid());
   }
+
+  // Initialize lasers
   lasers = new ArrayList<Laser>();
 }
 
 void draw() {
   background(0);
 
+  // Show stars
   for (Star s : stars) {
     s.show();
   }
 
+  // Handle and show asteroids
   for (int i = asteroids.size() - 1; i >= 0; i--) {
     Asteroid a = asteroids.get(i);
     a.move();
     a.show();
 
-    // Check collision with ship
+    // Check collision with spaceship
     if (dist((float)a.getCenterX(), (float)a.getCenterY(), (float)ship.getCenterX(), (float)ship.getCenterY()) < 20) {
       asteroids.remove(i);
-      // Handle ship collision logic if necessary
       continue;
     }
 
@@ -47,15 +56,19 @@ void draw() {
     }
   }
 
+  // Handle and show lasers
   for (int i = lasers.size() - 1; i >= 0; i--) {
     Laser l = lasers.get(i);
     l.move();
     l.show();
+
+    // Remove laser if it goes offscreen
     if (l.isOffScreen()) {
       lasers.remove(i);
     }
   }
 
+  // Move and show spaceship
   ship.move();
   ship.show();
 }
@@ -109,36 +122,35 @@ class Asteroid extends Floater {
 }
 
 class Laser {
-  private double x, y, speed, angle;
+  private float x, y, speed, angle;
 
   public Laser(Spaceship ship) {
-    x = ship.getCenterX();
-    y = ship.getCenterY();
-    angle = ship.getPointDirection();
+    x = (float) ship.getCenterX();
+    y = (float) ship.getCenterY();
     speed = 5;
+    angle = radians((float) ship.getPointDirection());
   }
 
   public void move() {
-    x += speed * Math.cos(Math.toRadians(angle));
-    y += speed * Math.sin(Math.toRadians(angle));
+    x += cos(angle) * speed;
+    y += sin(angle) * speed;
   }
 
   public void show() {
     fill(255, 0, 0);
     noStroke();
-    ellipse((float)x, (float)y, 5, 5);
+    ellipse(x, y, 5, 5);
   }
 
   public boolean isOffScreen() {
     return x < 0 || x > width || y < 0 || y > height;
   }
 
-  public double getX() {
+  public float getX() {
     return x;
   }
 
-  public double getY() {
+  public float getY() {
     return y;
   }
 }
- 
