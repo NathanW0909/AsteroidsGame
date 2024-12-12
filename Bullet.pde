@@ -1,7 +1,7 @@
 ArrayList<Laser> lasers;
 
 void keyPressed() {
-  if (key == ' ') {
+  if (key == 'SHIFT ') {
     lasers.add(new Laser(ship));
   }
 }
