@@ -40,8 +40,11 @@ void keyPressed() {
     ship.accelerate(0.5); 
   } else if (key == ' ') { 
     ship.hyperspace(); 
-  } 
+  } else if (keyCode == SHIFT) { 
+    lasers.add(new Laser(ship));
+  }
 }
+
 
 class Asteroid extends Floater { 
   private double rotationSpeed; 
