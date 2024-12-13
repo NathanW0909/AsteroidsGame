@@ -66,3 +66,19 @@ void keyPressed() {
     ship.hyperspace(); 
   }
 }
+
+class Bullet extends Floater {
+  public Bullet(Spaceship theship) {
+    corners = 0;
+    myCenterX = theship.getX();
+    myCenterY = theship.getY();
+    myXspeed = theship.getXSpeed();
+    myYspeed = theship.getYSpeed();
+    myPointDirection = theship.getPointDirection();
+    accelerate(0.6);
+  }
+
+  public void show() {
+    ellipse((float) myCenterX, (float) myCenterY, 10, 10);
+  }
+}
