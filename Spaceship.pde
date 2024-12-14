@@ -19,3 +19,16 @@ class Spaceship extends Floater {
     myPointDirection = Math.random() * 360;
   }
 }
+
+    public void show() {
+        fill(myColor);
+        stroke(myColor);
+        translate((float) myCenterX, (float) myCenterY);
+        rotate((float) (myPointDirection * Math.PI / 180));
+        beginShape();
+        for (int i = 0; i < corners; i++) {
+            vertex(xCorners[i], yCorners[i]);
+        }
+        endShape(CLOSE);
+        resetMatrix();
+    }
