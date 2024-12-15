@@ -1,69 +1,66 @@
-
-
-Spaceship ship; 
-Star[] stars; 
+ArrayList<Bullet> bullets;
 ArrayList<Asteroid> asteroids;
 
-
-  public void move() {
-    super.move();
-    turn(rotationSpeed);
+void setup() {
+  size(800, 600);
+  ship = new Spaceship();
+  bullets = new ArrayList<Bullet>();
+  asteroids = new ArrayList<Asteroid>();
+  for (int i = 0; i < 5; i++) {
+    asteroids.add(new Asteroid());
   }
 }
 
-void setup() { 
-  size(800, 600); 
-  ship = new Spaceship(); 
-  stars = new Star[100]; 
-  for (int i = 0; i < stars.length; i++) { 
-    stars[i] = new Star(); 
-  } 
-  asteroids = new ArrayList<Asteroid>(); 
-  for (int i = 0; i < 5; i++) { 
-    asteroids.add(new Asteroid()); 
-  } 
-}
+void draw() {
+  background(0);
+  ship.move();
+  ship.show();
 
-void draw() { 
-  background(0); 
-  
-  for (Star s : stars) { 
-    s.show(); 
-  } 
-  
-  for (Asteroid a : asteroids) { 
-    a.move(); 
-    a.show(); 
-  } 
-  
-  ship.move(); 
-  ship.show(); 
-}
+  for (int i = asteroids.size() - 1; i >= 0; i--) {
+    Asteroid a = asteroids.get(i);
+    a.move();
+    a.show();
 
-void keyPressed() { 
-  if (keyCode == LEFT) { 
-    ship.turn(-20); 
-  } else if (keyCode == RIGHT) { 
-    ship.turn(20); 
-  } else if (keyCode == UP) { 
-    ship.accelerate(0.5); 
-  } else if (key == ' ') { 
-    ship.hyperspace(); 
+    if (dist((float) ship.getX(), (float) ship.getY(), (float) a.getX(), (float) a.getY()) < 20) {
+      asteroids.remove(i);
+      break;
+    }
+
+    for (int j = bullets.size() - 1; j >= 0; j--) {
+      Bullet b = bullets.get(j);
+      if (dist((float) b.getX(), (float) b.getY(), (float) a.getX(), (float) a.getY()) < 20) {
+        bullets.remove(j);
+        asteroids.remove(i);
+        if (a.getSize() > 10) {
+          asteroids.add(new Asteroid(a.getX(), a.getY(), a.getSize() / 2));
+          asteroids.add(new Asteroid(a.getX(), a.getY(), a.getSize() / 2));
+        }
+        break;
+      }
+    }
+  }
+
+  for (int i = bullets.size() - 1; i >= 0; i--) {
+    Bullet b = bullets.get(i);
+    b.move();
+    b.show();
+
+    if (b.getX() < 0 || b.getX() > width || b.getY() < 0 || b.getY() > height) {
+      bullets.remove(i);
+    }
   }
 }
 
-class Bullet extends Floater {
-  public Bullet(Spaceship theship) {
-    corners = 0;
-    myCenterX = theship.getX();
-    myCenterY = theship.getY();
-    myXspeed = theship.getXSpeed();
-    myYspeed = theship.getYSpeed();
-    myPointDirection = theship.getPointDirection();
-    accelerate(0.6);
-  }
-
-  public void show() {
-    ellipse((float) myCenterX, (float) myCenterY, 10, 10);
+void keyPressed() {
+  if (keyCode == LEFT) {
+    ship.turn(-20);
+  } else if (keyCode == RIGHT) {
+    ship.turn(20);
+  } else if (keyCode == UP) {
+    ship.accelerate(0.5);
+  } else if (key == ' ') {
+    ship.hyperspace();
+  } else if (keyCode == SHIFT) {
+    bullets.add(new Bullet(ship));
   }
 }
