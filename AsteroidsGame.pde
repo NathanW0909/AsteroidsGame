@@ -36,7 +36,6 @@ void keyPressed() {
     if (keyCode == LEFT) ship.turn(-15);
     if (keyCode == RIGHT) ship.turn(15);
     if (keyCode == UP) ship.accelerate(0.5);
-    if (key == ' ') bullets.add(new Bullet(ship));
+    if (key == CODED && keyCode == SHIFT) bullets.add(new Bullet(ship));
     if (key == 'h') ship.hyperspace();
 }
-
