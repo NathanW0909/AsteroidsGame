@@ -1,28 +1,24 @@
-public class Bullet {
-  private float x, y, directionX, directionY;
+class Bullet {
+    private double x, y;
+    private double directionX, directionY;
 
-  // Constructor
-  public Bullet(Spaceship player) {
-    x = player.getX();
-    y = player.getY();
-    directionX = Math.cos(Math.toRadians(player.getPointDirection())) * 5;
-    directionY = Math.sin(Math.toRadians(player.getPointDirection())) * 5;
-  }
+    public Bullet(Spaceship spaceship) {
+        this.x = spaceship.getX();
+        this.y = spaceship.getY();
+        this.directionX = Math.cos(Math.toRadians(spaceship.getPointDirection())) * 5;
+        this.directionY = Math.sin(Math.toRadians(spaceship.getPointDirection())) * 5;
+    }
 
-  // Move the bullet
-  public void move() {
-    x += directionX;
-    y += directionY;
-  }
+    public void move() {
+        x += directionX;
+        y += directionY;
+    }
 
-  // Show the bullet
-  public void show() {
-    fill(255);
-    ellipse(x, y, 5, 5);
-  }
+    public void show() {
+        fill(255, 0, 0);
+        ellipse((float)x, (float)y, 5, 5);
+    }
 
-  // Getters
-  public float getX() { return x; }
-  public float getY() { return y; }
+    public double getX() { return x; }
+    public double getY() { return y; }
 }
-
