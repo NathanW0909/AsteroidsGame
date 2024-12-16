@@ -1,41 +1,30 @@
-public class Asteroid extends Floater {
-    private double rotSpeed;
+class Asteroid extends Floater {
+
+    private int rotSpeed;
 
     public Asteroid() {
-        corners = 6;
-        xCorners = new int[]{-10, -5, 10, 5, 10, -5};
-        yCorners = new int[]{-5, -10, -5, 10, 5, 10};
-        myColor = color(200, 200, 200);
-        myCenterX = random(width);
-        myCenterY = random(height);
-        myXspeed = random(-2, 2);
-        myYspeed = random(-2, 2);
-        myPointDirection = random(360);
-        rotSpeed = random(-2, 2);
-    }
-
-    public void move() {
-        myCenterX += myXspeed;
-        myCenterY += myYspeed;
-        myPointDirection += rotSpeed;
-        if (myCenterX > width) myCenterX = 0;
-        else if (myCenterX < 0) myCenterX = width;
-        if (myCenterY > height) myCenterY = 0;
-        else if (myCenterY < 0) myCenterY = height;
+        corners = 10;
+        xCorners = new int[]{0, -15, -20, -25, -20, 0, 20, 25, 20, 15};
+        yCorners = new int[]{-30, -25, -15, 0, 15, 25, 15, 0, -15, -25};
+        myColor = color(128, 128, 255);
+        myDirectionX = Math.random() * 2 - 1;
+        myDirectionY = Math.random() * 2 - 1;
+        myCenterX = (int) (Math.random() * 601);
+        myCenterY = (int) (Math.random() * 601);
+        myPointDirection = (int) (Math.random() * 361);
+        rotSpeed = (int) (Math.random() * 3 + 1);
     }
 
     public void show() {
-        fill(myColor);
-        stroke(myColor);
-        pushMatrix();
-        translate((float) myCenterX, (float) myCenterY);
-        rotate((float) (myPointDirection * Math.PI / 180));
-        beginShape();
-        for (int i = 0; i < corners; i++) {
-            vertex(xCorners[i], yCorners[i]);
-        }
-        endShape(CLOSE);
-        popMatrix();
+        turn(rotSpeed);
+        super.show();
+    }
+
+    public double getCenterX() {
+        return myCenterX;
+    }
+
+    public double getCenterY() {
+        return myCenterY;
     }
 }
-
