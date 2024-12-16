@@ -1,20 +1,33 @@
-public class Bullet extends Floater {
-    public Bullet(Spaceship theShip) {
-        corners = 0;
-        xCorners = new int[0];
-        yCorners = new int[0];
-        myColor = color(255, 255, 0);
-        myCenterX = theShip.myCenterX;
-        myCenterY = theShip.myCenterY;
-        myXspeed = theShip.myXspeed;
-        myYspeed = theShip.myYspeed;
-        myPointDirection = theShip.myPointDirection;
-        accelerate(6);
+class Bullet extends Floater {
+
+    public Bullet() {
+        myCenterX = ss.getCenterX();
+        myCenterY = ss.getCenterY();
+        myPointDirection = ss.getPointDirection();
+        myDirectionX = 7 * Math.cos(ss.getPointDirection() * (Math.PI / 180)) + ss.getDirectionX();
+        myDirectionY = 7 * Math.sin(ss.getPointDirection() * (Math.PI / 180)) + ss.getDirectionY();
+    }
+
+    public void move() {
+        myCenterX += myDirectionX;
+        myCenterY += myDirectionY;
     }
 
     public void show() {
-        fill(myColor);
-        noStroke();
-        ellipse((float) myCenterX, (float) myCenterY, 5, 5);
+        fill(#FF5733);
+        stroke(#FFC300);
+        ellipse((float) myCenterX, (float) myCenterY, 15, 15);
+    }
+
+    public double getPointDirection() {
+        return myPointDirection;
+    }
+
+    public double getCenterX() {
+        return myCenterX;
+    }
+
+    public double getCenterY() {
+        return myCenterY;
     }
 }
