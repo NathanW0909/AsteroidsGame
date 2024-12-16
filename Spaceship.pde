@@ -1,60 +1,66 @@
-public class Spaceship {
-  private float myCenterX, myCenterY;
-  private float myDirectionX, myDirectionY;
-  private float myPointDirection;
-  private boolean isAccelerating = false;
+class Spaceship {
+    private int myCenterX, myCenterY;
+    private double myDirectionX, myDirectionY;
+    private int myPointDirection;
 
-  // Constructor
-  public Spaceship() {
-    myCenterX = 350;
-    myCenterY = 350;
-    myDirectionX = 0;
-    myDirectionY = 0;
-    myPointDirection = 0;
-  }
+    private int[] xCorners, yCorners;
+    private int corners;
+    private int myColor;
 
-  // Move the spaceship
-  public void move() {
-    if (isAccelerating) {
-      myDirectionX += Math.cos(Math.toRadians(myPointDirection)) * 0.1;
-      myDirectionY += Math.sin(Math.toRadians(myPointDirection)) * 0.1;
+    public Spaceship() {
+        corners = 3;
+        xCorners = new int[corners];
+        yCorners = new int[corners];
+        xCorners[0] = -8;
+        yCorners[0] = -8;
+        xCorners[1] = 16;
+        yCorners[1] = 0;
+        xCorners[2] = -8;
+        yCorners[2] = 8;
+
+        myColor = 255;
+        myCenterX = 300;
+        myCenterY = 300;
+        myDirectionX = 0;
+        myDirectionY = 0;
+        myPointDirection = 0;
     }
 
-    myCenterX += myDirectionX;
-    myCenterY += myDirectionY;
-  }
+    public void move() {
+        myCenterX += myDirectionX;
+        myCenterY += myDirectionY;
+    }
 
-  // Show the spaceship
-  public void show() {
-    pushMatrix();
-    translate(myCenterX, myCenterY);
-    rotate(radians(myPointDirection));
-    fill(255);
-    triangle(-10, -10, 20, 0, -10, 10);
-    popMatrix();
-  }
+    public void show() {
+        stroke(myColor);
+        fill(myColor, 100, 255);
+        beginShape();
+        for (int i = 0; i < corners; i++) {
+            vertex(myCenterX + xCorners[i], myCenterY + yCorners[i]);
+        }
+        endShape(CLOSE);
+    }
 
-  // Accelerate the spaceship
-  public void accelerate(float acceleration) {
-    isAccelerating = true;
-  }
+    public void accelerate(double acceleration) {
+        myDirectionX += Math.cos(Math.toRadians(myPointDirection)) * acceleration;
+        myDirectionY += Math.sin(Math.toRadians(myPointDirection)) * acceleration;
+    }
 
-  // Turn the spaceship
-  public void turn(float angle) {
-    myPointDirection += angle;
-  }
+    public void turn(int angle) {
+        myPointDirection += angle;
+    }
 
-  public void setIsAccelerating(boolean value) {
-    isAccelerating = value;
-  }
+    public void hyperspace() {
+        myCenterX = (int)(Math.random() * width);
+        myCenterY = (int)(Math.random() * height);
+        myPointDirection = (int)(Math.random() * 360);
+    }
 
-  // Setters and getters
-  public void setX(int x) { myCenterX = x; }
-  public void setY(int y) { myCenterY = y; }
-  public void setDirectionX(float x) { myDirectionX = x; }
-  public void setDirectionY(float y) { myDirectionY = y; }
-  public void setPointDirection(float direction) { myPointDirection = direction; }
-  public float getX() { return myCenterX; }
-  public float getY() { return myCenterY; }
-  public float getPointDirection() { return myPointDirection; }
+    public void setDirectionX(double dx) { myDirectionX = dx; }
+    public void setDirectionY(double dy) { myDirectionY = dy; }
+    public double getX() { return myCenterX; }
+    public double getY() { return myCenterY; }
+    public double getDirectionX() { return myDirectionX; }
+    public double getDirectionY() { return myDirectionY; }
+    public double getPointDirection() { return myPointDirection; }
 }
