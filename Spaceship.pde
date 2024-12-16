@@ -10,6 +10,7 @@ class Spaceship {
         directionX = 0;
         directionY = 0;
         pointDirection = 0;
+        println("Spaceship initialized at (" + x + ", " + y + ")");
     }
 
     public void move() {
@@ -50,6 +51,7 @@ class Spaceship {
         x = Math.random() * width;
         y = Math.random() * height;
         pointDirection = (int)(Math.random() * 360);
+        println("Hyperspace activated: New position (" + x + ", " + y + ")");
     }
 
     public double getX() { return x; }
