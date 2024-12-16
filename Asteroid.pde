@@ -1,55 +1,75 @@
 class Asteroids extends Floater {
-  private int rotSpeed;
-  private int factor;
+  private int mySizeFactor;
+  private int myRotationSpeed;
   
-  Asteroids() {
+  public Asteroids(int scale) {
+    //sets corners of astroids
     corners = 8;
     xCorners = new int[corners];
     yCorners = new int[corners];
-    rotSpeed = (int)(Math.random() * 6) - 3;
-    factor = (int)(Math.random() * 20) + 20;
+    mySizeFactor = scale;
     
-    xCorners[0] = 0;
-    yCorners[0] = -12;
-    xCorners[1] = -8;
-    yCorners[1] = -8;
-    xCorners[2] = -10;
-    yCorners[2] = -6;
-    xCorners[3] = -12;
-    yCorners[3] = -2;
-    xCorners[4] = -9;
-    yCorners[4] = 4;
-    xCorners[5] = -5;
-    yCorners[5] = 6;
-    xCorners[6] = 2;
-    yCorners[6] = 5;
-    xCorners[7] = 7;
-    yCorners[7] = 0;
+    //initializes all values for x corners
+    xCorners[0] = 3 * mySizeFactor;
+    xCorners[1] = 8 * mySizeFactor;
+    xCorners[2] = 8 * mySizeFactor;
+    xCorners[3] = 3 * mySizeFactor;
+    xCorners[4] = -3 * mySizeFactor;
+    xCorners[5] = -8 * mySizeFactor;
+    xCorners[6] = -8 * mySizeFactor;
+    xCorners[7] = -3 * mySizeFactor;
     
-    myColor = color(255, 255, 255);
-    myCenterX = (int)(Math.random() * 701);
-    myCenterY = (int)(Math.random() * 601);
-    myDirectionX = (Math.random() * 4) - 2;
-    myDirectionY = (Math.random() * 4) - 2;
-    myPointDirection = (int)(Math.random() * 361);
-  }
-  
-  public void show() {
-    fill(myColor);
-    stroke(255);
-    double dRadians = myPointDirection * (Math.PI / 180);
-    int xRotatedTranslated, yRotatedTranslated;
-    beginShape();
-    for (int nI = 0; nI < corners; nI++) {
-      xRotatedTranslated = (int)((xCorners[nI] * Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians)) + myCenterX);
-      yRotatedTranslated = (int)((xCorners[nI] * Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians)) + myCenterY);
-      vertex(xRotatedTranslated, yRotatedTranslated);
+    //initializes all values for y corners
+    yCorners[0] = 8 * mySizeFactor;
+    yCorners[1] = 3 * mySizeFactor;
+    yCorners[2] = -3 * mySizeFactor;
+    yCorners[3] = -8 * mySizeFactor;
+    yCorners[4] = -8 * mySizeFactor;
+    yCorners[5] = -3 * mySizeFactor;
+    yCorners[6] = 3 * mySizeFactor;
+    yCorners[7] = 8 * mySizeFactor;
+    
+    //sets color
+    myColor = 155;
+    //initializes position
+    myCenterX = ((int)(Math.random() * 701));
+    myCenterY = (int)(Math.random() * 701);
+      
+    //initializes speed
+    myDirectionX = ((Math.random() * 5) - 2) / mySizeFactor;
+    myDirectionY = ((Math.random() * 5) - 2) / mySizeFactor;
+    myRotationSpeed = (10 / mySizeFactor) * ((int)(Math.random() * 5) - 2);
+    
+    if (myRotationSpeed == 0){
+      if (Math.random() < 0.5)
+        myRotationSpeed = -3;
+      else
+        myRotationSpeed = 3;
     }
-    endShape(CLOSE);
   }
   
   public void move() {
-    myPointDirection += rotSpeed;
+    turn(myRotationSpeed);
     super.move();
   }
+  
+  public void randomizePosition() {
+    //randomizes the position of each asteroid 
+    myCenterX = (int)(Math.random() * 701);
+    myCenterY = (int)(Math.random() * 701);
+  }
+  
+  public void setX(int x) {myCenterX = x;}
+  public int getX() {return (int)myCenterX;}
+  public void setY(int y) {myCenterY = y;}
+  public int getY() {return (int)myCenterY;}
+  
+  public void setDirectionX(double x) {myDirectionX = x;}
+  public double getDirectionX() {return myDirectionX;}
+  public void setDirectionY(double y) {myDirectionY = y;}
+  public double getDirectionY() {return myDirectionY;}
+  public void setPointDirection(int n) {myPointDirection = n;}
+  public double getPointDirection() {return myPointDirection;}
+  
+  public int getSize() {return mySizeFactor;}
 }
