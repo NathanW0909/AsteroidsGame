@@ -1,22 +1,24 @@
 class Bullet {
-  float x, y, angle;
-  float speed = 5;
-  
-  Bullet(float x, float y, float angle) {
-    this.x = x;
-    this.y = y;
-    this.angle = angle;
-  }
-  
-  public void move() {
-    x += cos(radians(angle)) * speed;
-    y += sin(radians(angle)) * speed;
-  }
-  
-  public void show() {
-    fill(255, 0, 0);
-    noStroke();
-    ellipse(x, y, 5, 5);
-  }
-}
+    private double x, y;
+    private double directionX, directionY;
 
+    public Bullet(Spaceship spaceship) {
+        this.x = spaceship.getX();
+        this.y = spaceship.getY();
+        this.directionX = Math.cos(Math.toRadians(spaceship.getPointDirection())) * 5;
+        this.directionY = Math.sin(Math.toRadians(spaceship.getPointDirection())) * 5;
+    }
+
+    public void move() {
+        x += directionX;
+        y += directionY;
+    }
+
+    public void show() {
+        fill(255, 0, 0);
+        ellipse((float)x, (float)y, 5, 5);
+    }
+
+    public double getX() { return x; }
+    public double getY() { return y; }
+}
