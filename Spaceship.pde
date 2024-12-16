@@ -1,60 +1,38 @@
-class Spaceship {
-    private double x, y;
-    private double directionX, directionY;
-    private int pointDirection;
-    private final int size = 20;
-
-    public Spaceship() {
-        x = width / 2;
-        y = height / 2;
-        directionX = 0;
-        directionY = 0;
-        pointDirection = 0;
-        println("Spaceship initialized at (" + x + ", " + y + ")");
-    }
-
-    public void move() {
-        x += directionX;
-        y += directionY;
-
-        // Wrap around the screen edges
-        if (x > width) x = 0;
-        if (x < 0) x = width;
-        if (y > height) y = 0;
-        if (y < 0) y = height;
-    }
-
-    public void show() {
-        fill(255);
-        stroke(0);
-        pushMatrix();
-        translate((float)x, (float)y);
-        rotate(radians(pointDirection));
-        beginShape();
-        vertex(-size / 2, -size / 2);
-        vertex(size / 2, -size / 2);
-        vertex(0, size);
-        endShape(CLOSE);
-        popMatrix();
-    }
-
-    public void accelerate(double acceleration) {
-        directionX += Math.cos(Math.toRadians(pointDirection)) * acceleration;
-        directionY += Math.sin(Math.toRadians(pointDirection)) * acceleration;
-    }
-
-    public void turn(int angle) {
-        pointDirection += angle;
-    }
-
-    public void hyperspace() {
-        x = Math.random() * width;
-        y = Math.random() * height;
-        pointDirection = (int)(Math.random() * 360);
-        println("Hyperspace activated: New position (" + x + ", " + y + ")");
-    }
-
-    public double getX() { return x; }
-    public double getY() { return y; }
-    public int getPointDirection() { return pointDirection; }
+class SpaceShip extends Floater {
+  SpaceShip() {
+    corners = 6;
+    xCorners = new int[corners];
+    yCorners = new int[corners];
+    
+    xCorners[0] = 0;
+    yCorners[0] = -10;
+    xCorners[1] = -5;
+    yCorners[1] = 5;
+    xCorners[2] = -3;
+    yCorners[2] = 8;
+    xCorners[3] = 3;
+    yCorners[3] = 8;
+    xCorners[4] = 5;
+    yCorners[4] = 5;
+    xCorners[5] = 0;
+    yCorners[5] = -10;
+    
+    myColor = color(128, 128, 255);
+    myCenterX = 350;
+    myCenterY = 300;
+    myDirectionX = 0;
+    myDirectionY = 0;
+    myPointDirection = 0;
+  }
+  
+  public void setX(int x) { myCenterX = x; } 
+  public int getX() { return (int)myCenterX; }   
+  public void setY(int y) { myCenterY = y; } 
+  public int getY() { return (int)myCenterY; }   
+  public void setDirectionX(double x) { myDirectionX = x; }   
+  public double getDirectionX() { return myDirectionX; }
+  public void setDirectionY(double y) { myDirectionY = y; }
+  public double getDirectionY() { return myDirectionY; }
+  public void setPointDirection(int degrees) { myPointDirection = degrees; }
+  public double getPointDirection() { return myPointDirection; }
 }
