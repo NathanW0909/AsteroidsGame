@@ -1,33 +1,28 @@
-class Bullet extends Floater {
+public class Bullet {
+  private float x, y, directionX, directionY;
 
-    public Bullet() {
-        myCenterX = ss.getCenterX();
-        myCenterY = ss.getCenterY();
-        myPointDirection = ss.getPointDirection();
-        myDirectionX = 7 * Math.cos(ss.getPointDirection() * (Math.PI / 180)) + ss.getDirectionX();
-        myDirectionY = 7 * Math.sin(ss.getPointDirection() * (Math.PI / 180)) + ss.getDirectionY();
-    }
+  // Constructor
+  public Bullet(Spaceship player) {
+    x = player.getX();
+    y = player.getY();
+    directionX = Math.cos(Math.toRadians(player.getPointDirection())) * 5;
+    directionY = Math.sin(Math.toRadians(player.getPointDirection())) * 5;
+  }
 
-    public void move() {
-        myCenterX += myDirectionX;
-        myCenterY += myDirectionY;
-    }
+  // Move the bullet
+  public void move() {
+    x += directionX;
+    y += directionY;
+  }
 
-    public void show() {
-        fill(#FF5733);
-        stroke(#FFC300);
-        ellipse((float) myCenterX, (float) myCenterY, 15, 15);
-    }
+  // Show the bullet
+  public void show() {
+    fill(255);
+    ellipse(x, y, 5, 5);
+  }
 
-    public double getPointDirection() {
-        return myPointDirection;
-    }
-
-    public double getCenterX() {
-        return myCenterX;
-    }
-
-    public double getCenterY() {
-        return myCenterY;
-    }
+  // Getters
+  public float getX() { return x; }
+  public float getY() { return y; }
 }
+
