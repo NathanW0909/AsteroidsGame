@@ -1,12 +1,12 @@
-//constants and declaration relating to player
+// Constants and declarations related to the player
 Spaceship player;
-ArrayList <Bullet> bulletList = new ArrayList<Bullet>();
-ArrayList <Asteroids> asteroidList = new ArrayList<Asteroids>();
+ArrayList<Bullet> bulletList = new ArrayList<Bullet>();
+ArrayList<Asteroids> asteroidList = new ArrayList<Asteroids>();
 int INITIAL_NUM_ASTEROIDS = 11;
 int MIN_ASTEROID_SIZE = 3;
 int MAX_ASTEROID_SIZE = 10;
 
-boolean isStart = true; // Start screen
+boolean isStart = true; // Start screen flag
 int canvasSize = 700;   // Canvas size
 
 public void setup() {
@@ -17,48 +17,47 @@ public void setup() {
   
   player = new Spaceship();
   
-  newAsteroids();
+  newAsteroids();  // Initialize asteroids
 }
 
 public void draw() {
-  background(0);
-  
-  // Move and show player
-  player.move();
-  player.show();
-  
-  for (int i = 0; i < bulletList.size(); i++) {
-    bulletList.get(i).show();
-    bulletList.get(i).move();
-  }
+  background(0);  // Clear the screen to black each frame
 
-  for (int i = 0; i < asteroidList.size(); i++) {
-    asteroidList.get(i).show();
-    asteroidList.get(i).move();
-  }
-
-  // Handle controls
-  controller();
-  
-  // Handle collisions
-  checkPlayerContact();
-  checkBulletLocation();
-  checkBulletContact();
-  
+  // If game hasn't started, show the start screen
   if (isStart) {
     startScreen();
-  }
+  } else {
+    // Game logic here after the start screen is cleared
+    player.move();
+    player.show();
   
-  if (player.getHealth() == 0) {
-    loseScreen();
-  }
-  
-  if (score == 1000) {
-    winGame();
+    for (int i = 0; i < bulletList.size(); i++) {
+      bulletList.get(i).show();
+      bulletList.get(i).move();
+    }
+
+    for (int i = 0; i < asteroidList.size(); i++) {
+      asteroidList.get(i).show();
+      asteroidList.get(i).move();
+    }
+
+    controller();  // Handle movement
+    checkPlayerContact();  // Check if player collides with asteroids
+    checkBulletLocation();  // Check if bullets go out of bounds
+    checkBulletContact();  // Check bullet-asteroid collisions
+    
+    // Game over conditions
+    if (player.getHealth() == 0) {
+      loseScreen();
+    }
+
+    if (score == 1000) {
+      winGame();
+    }
   }
 }
 
-// Handle button presses
+// Handle key presses for movement, shooting, and starting the game
 public void keyPressed() {
   if (key == 'w') {
     player.setIsAccelerating(true);
@@ -74,7 +73,7 @@ public void keyPressed() {
   
   if (key == 's' && isStart == true) {
     isStart = false;
-    loop();
+    loop();  // Start the game loop after pressing 's'
   }
 }
 
@@ -85,14 +84,14 @@ public void keyReleased() {
   }
 }
 
-// Moves player depending on boolean
+// Moves the player based on key presses
 public void controller() {
   if (player.isAccelerating()) {
     player.accelerate(0.1);
   }
 }
 
-// Stops player movement, changes stars, and resets player position
+// Hyperspace teleportation (resets game elements)
 public void hyperspace() {
   clearBullets();
   clearAsteroids();
@@ -107,20 +106,20 @@ public void hyperspace() {
   newStars();
 }
 
-// Set speed to 0
+// Sets speed to 0
 public void brake() {
   player.setDirectionX(0);
   player.setDirectionY(0);
 }
 
-// Shoots bullets
+// Shoot bullets if space allows
 public void shoot() {  
   if (bulletList.size() < 5) {
     bulletList.add(new Bullet(player));
   }
 }
 
-// Function that erases asteroids on player collision
+// Check for player-asteroid collisions
 public void checkPlayerContact() {
   for (int i = 0; i < asteroidList.size(); i++) {
     float space = dist(player.getX(), player.getY(), asteroidList.get(i).getX(), asteroidList.get(i).getY());
@@ -133,7 +132,7 @@ public void checkPlayerContact() {
   }
 }
 
-// Function to check bullet-asteroid collision
+// Check for bullet-asteroid collisions
 public void checkBulletContact() {
   if (bulletList.size() > 0 && asteroidList.size() > 0) {
     for (int i = 0; i < bulletList.size(); i++) {
@@ -153,7 +152,7 @@ public void checkBulletContact() {
   }
 }
 
-// Function to check if bullets are out of bounds
+// Remove bullets if they go out of bounds
 public void checkBulletLocation() {
   for (int i = 0; i < bulletList.size(); i++) {
     if (bulletList.get(i).getX() > width || bulletList.get(i).getX() < 0 ||
@@ -164,7 +163,7 @@ public void checkBulletLocation() {
   }
 }
 
-// Creates new asteroids
+// Generate new asteroids
 public void newAsteroids() {
   for (int i = 0; i < INITIAL_NUM_ASTEROIDS; i++) {
     int asteroidSize = (int)(Math.random() * (MAX_ASTEROID_SIZE - MIN_ASTEROID_SIZE + 1) + MIN_ASTEROID_SIZE);
@@ -172,17 +171,7 @@ public void newAsteroids() {
   }
 }
 
-// Clears all asteroids
-public void clearAsteroids() {
-  asteroidList.clear();
-}
-
-// Clears all bullets
-public void clearBullets() {
-  bulletList.clear();
-}
-
-// Displays start screen
+// Display the start screen
 public void startScreen() {
   background(0);
   
@@ -200,20 +189,3 @@ public void startScreen() {
   text("S to Start", 270, 550);
 }
 
-// Displays lose screen
-public void loseScreen() {
-  noLoop();
-  background(0);
-  fill(255, 0, 0);
-  textSize(64);
-  text("You Lose", 220, 250);
-}
-
-// Displays win screen
-public void winGame() {
-  noLoop();
-  background(0);
-  fill(0, 0, 255);
-  textSize(64);
-  text("You Win!", 220, 250);
-}
