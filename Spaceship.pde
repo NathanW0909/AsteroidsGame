@@ -1,66 +1,58 @@
 class Spaceship {
-    private int myCenterX, myCenterY;
-    private double myDirectionX, myDirectionY;
-    private int myPointDirection;
-
-    private int[] xCorners, yCorners;
-    private int corners;
-    private int myColor;
+    private double x, y;
+    private double directionX, directionY;
+    private int pointDirection;
+    private final int size = 20;
 
     public Spaceship() {
-        corners = 3;
-        xCorners = new int[corners];
-        yCorners = new int[corners];
-        xCorners[0] = -8;
-        yCorners[0] = -8;
-        xCorners[1] = 16;
-        yCorners[1] = 0;
-        xCorners[2] = -8;
-        yCorners[2] = 8;
-
-        myColor = 255;
-        myCenterX = 300;
-        myCenterY = 300;
-        myDirectionX = 0;
-        myDirectionY = 0;
-        myPointDirection = 0;
+        x = width / 2;
+        y = height / 2;
+        directionX = 0;
+        directionY = 0;
+        pointDirection = 0;
     }
 
     public void move() {
-        myCenterX += myDirectionX;
-        myCenterY += myDirectionY;
+        x += directionX;
+        y += directionY;
+
+        // Wrap around the screen edges
+        if (x > width) x = 0;
+        if (x < 0) x = width;
+        if (y > height) y = 0;
+        if (y < 0) y = height;
     }
 
     public void show() {
-        stroke(myColor);
-        fill(myColor, 100, 255);
+        fill(255);
+        stroke(0);
+        pushMatrix();
+        translate((float)x, (float)y);
+        rotate(radians(pointDirection));
         beginShape();
-        for (int i = 0; i < corners; i++) {
-            vertex(myCenterX + xCorners[i], myCenterY + yCorners[i]);
-        }
+        vertex(-size / 2, -size / 2);
+        vertex(size / 2, -size / 2);
+        vertex(0, size);
         endShape(CLOSE);
+        popMatrix();
     }
 
     public void accelerate(double acceleration) {
-        myDirectionX += Math.cos(Math.toRadians(myPointDirection)) * acceleration;
-        myDirectionY += Math.sin(Math.toRadians(myPointDirection)) * acceleration;
+        directionX += Math.cos(Math.toRadians(pointDirection)) * acceleration;
+        directionY += Math.sin(Math.toRadians(pointDirection)) * acceleration;
     }
 
     public void turn(int angle) {
-        myPointDirection += angle;
+        pointDirection += angle;
     }
 
     public void hyperspace() {
-        myCenterX = (int)(Math.random() * width);
-        myCenterY = (int)(Math.random() * height);
-        myPointDirection = (int)(Math.random() * 360);
+        x = Math.random() * width;
+        y = Math.random() * height;
+        pointDirection = (int)(Math.random() * 360);
     }
 
-    public void setDirectionX(double dx) { myDirectionX = dx; }
-    public void setDirectionY(double dy) { myDirectionY = dy; }
-    public double getX() { return myCenterX; }
-    public double getY() { return myCenterY; }
-    public double getDirectionX() { return myDirectionX; }
-    public double getDirectionY() { return myDirectionY; }
-    public double getPointDirection() { return myPointDirection; }
+    public double getX() { return x; }
+    public double getY() { return y; }
+    public int getPointDirection() { return pointDirection; }
 }
