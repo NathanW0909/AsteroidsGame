@@ -3,10 +3,10 @@ class Bullet {
     private double directionX, directionY;
 
     public Bullet(Spaceship spaceship) {
-        this.x = spaceship.getX();
-        this.y = spaceship.getY();
-        this.directionX = Math.cos(Math.toRadians(spaceship.getPointDirection())) * 5;
-        this.directionY = Math.sin(Math.toRadians(spaceship.getPointDirection())) * 5;
+        x = spaceship.getX();
+        y = spaceship.getY();
+        directionX = Math.cos(Math.toRadians(spaceship.getPointDirection())) * 5;
+        directionY = Math.sin(Math.toRadians(spaceship.getPointDirection())) * 5;
     }
 
     public void move() {
@@ -16,9 +16,11 @@ class Bullet {
 
     public void show() {
         fill(255, 0, 0);
+        noStroke();
         ellipse((float)x, (float)y, 5, 5);
     }
 
-    public double getX() { return x; }
-    public double getY() { return y; }
+    public boolean isOffScreen() {
+        return (x < 0 || x > width || y < 0 || y > height);
+    }
 }
