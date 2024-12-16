@@ -5,7 +5,6 @@ int INITIAL_NUM_ASTEROIDS = 11;
 int MIN_ASTEROID_SIZE = 3;
 int MAX_ASTEROID_SIZE = 10;
 
-boolean isStart = true;
 int canvasSize = 700;
 
 public void setup() {
@@ -18,46 +17,45 @@ public void setup() {
 
 public void draw() {
   background(0);
-  if (isStart) {
-    startScreen();
-  } else {
-    player.move();
-    player.show();
+  player.move();
+  player.show();
   
-    for (int i = 0; i < bulletList.size(); i++) {
-      bulletList.get(i).show();
-      bulletList.get(i).move();
-    }
-
-    for (int i = 0; i < asteroidList.size(); i++) {
-      asteroidList.get(i).show();
-      asteroidList.get(i).move();
-    }
-
-    controller();
-    checkPlayerContact();
-    checkBulletLocation();
-    checkBulletContact();
+  for (int i = 0; i < bulletList.size(); i++) {
+    bulletList.get(i).show();
+    bulletList.get(i).move();
   }
+
+  for (int i = 0; i < asteroidList.size(); i++) {
+    asteroidList.get(i).show();
+    asteroidList.get(i).move();
+  }
+
+  controller();
+  checkPlayerContact();
+  checkBulletLocation();
+  checkBulletContact();
 }
 
 public void keyPressed() {
-  if (key == 'w') {
-    player.setIsAccelerating(true);
+  if (keyCode == UP) { 
+    player.accelerate(0.1); 
   }
-  if (key == 'd') { player.turn(5); }
-  if (key == 'a') { player.turn(-5); }
-  if (key == 'q') { hyperspace(); }
-  if (key == 'e') { brake(); }
-  if (key == 'o') { shoot(); }
-  if (key == 's' && isStart == true) {
-    isStart = false;
-    loop();
+  if (keyCode == RIGHT) { 
+    player.turn(5); 
+  }
+  if (keyCode == LEFT) { 
+    player.turn(-5); 
+  }
+  if (key == SHIFT) { 
+    hyperspace(); 
+  }
+  if (key == ' ') { 
+    shoot(); 
   }
 }
 
 public void keyReleased() {
-  if (key == 'w') {
+  if (keyCode == UP) {
     player.setIsAccelerating(false);
   }
 }
@@ -78,11 +76,6 @@ public void hyperspace() {
   player.setDirectionY(0);
   player.setPointDirection((int)(Math.random() * 360));
   newStars();
-}
-
-public void brake() {
-  player.setDirectionX(0);
-  player.setDirectionY(0);
 }
 
 public void shoot() {  
@@ -135,19 +128,4 @@ public void newAsteroids() {
     int asteroidSize = (int)(Math.random() * (MAX_ASTEROID_SIZE - MIN_ASTEROID_SIZE + 1) + MIN_ASTEROID_SIZE);
     asteroidList.add(new Asteroids(asteroidSize));
   }
-}
-
-public void startScreen() {
-  background(0);
-  fill(0, 0, 255);
-  textSize(64);
-  text("Blue Star", 210, 200);
-  fill(255);
-  textSize(32);
-  text("W to Move", 270, 250);
-  text("A + D to Turn", 245, 290);
-  text("Q to Hyperspace", 220, 330);
-  text("E to Brake", 270, 370);
-  text("O to Shoot", 265, 410);
-  text("S to Start", 270, 550);
 }
